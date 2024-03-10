@@ -9,8 +9,22 @@
         li {
             list-style-type: none;
         }
+
         .template {
             display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+        .new-content {
+            animation: fadeIn 1s ease-in-out;
         }
     </style>
     <script src="/dist/hplus.js"></script>
@@ -19,20 +33,20 @@
 <body>
     <div>
         <ol h-data="menu">
-            <li template class="template"><a href="{{b}}" text="{{a}}"></a></li>
+            <li template class="new-content template"><a href="{{b}}">{{a}}</a></li>
         </ol>
     </div>
     <script>
         window.addEventListener('load', function () {
-            function foo(){
+            function foo() {
                 return [
-                    {"a":"test","b":"www.baidu.com"},
-                    {"a":"test1","b":"www.baidu1.com"},
-                    {"a":"test2","b":"www.baidu2.com"}
+                    { "a": "test", "b": "https://www.baidu.com/" },
+                    { "a": "test1", "b": "https://www.baidu.com/" },
+                    { "a": "test2", "b": "https://www.baidu.com/" }
                 ]
             }
             //hplus.createdatafn("menu",foo)
-            hplus.render("menu",foo())
+            hplus.render("menu", foo())
         });
     </script>
 </body>
