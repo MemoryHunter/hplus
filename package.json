@@ -1,0 +1,24 @@
+{
+  "name": "hplus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/hplus.cjs.js",
+  "module": "dist/hplus.es.js",
+  "browser": "dist/hplus.js",
+  "files": [  
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "author": "Snow.zhao",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^4.12.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}

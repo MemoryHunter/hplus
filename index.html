@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>html plus</title>
+    <style>
+        li {
+            list-style-type: none;
+        }
+        .template {
+            display: none;
+        }
+    </style>
+    <script src="/dist/hplus.js"></script>
+</head>
+
+<body>
+    <div>
+        <ol h-data="menu">
+            <li template class="template"><a href="{{b}}" text="{{a}}"></a></li>
+        </ol>
+    </div>
+    <script>
+        window.addEventListener('load', function () {
+            function foo(){
+                return [
+                    {"a":"test","b":"www.baidu.com"},
+                    {"a":"test1","b":"www.baidu1.com"},
+                    {"a":"test2","b":"www.baidu2.com"}
+                ]
+            }
+            //hplus.createdatafn("menu",foo)
+            hplus.render("menu",foo())
+        });
+    </script>
+</body>
+
+</html>
