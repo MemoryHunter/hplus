@@ -1,7 +1,7 @@
 ### html natural defect
 ---
 #### Since the invention of HTML, it has always been used for hypertext presentation, suffering from a lack of scalability and interactivity. Although W3C has been constantly improving HTML, this defect has never been completely resolved. 
-#### e.g. We want to assign a data attribute to the select element, and when we assign values such as "english", "spanish", "french", "german" to the data attribute, it can automatically generate four <option> elements like <option value="english">English</option>
+#### e.g. We want to assign a data attribute to the select element, and when we assign values such as "english", "spanish", "french", "german" to the data attribute, it can automatically generate four option elements like &lt;option value="english"&gt;English&lt;/option&gt;
 ```html
     <select id="languages" name="languages" data>  
         <option value="english">English</option>  
