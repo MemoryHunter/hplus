@@ -10,45 +10,106 @@
             list-style-type: none;
         }
 
-        .template {
+        [template] {
             display: none;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
+        .blue {
+            background-color: blue;
+        }
 
-            to {
-                opacity: 1;
-            }
+        .chartreuse {
+            background-color: chartreuse;
         }
         .new-content {
             animation: fadeIn 1s ease-in-out;
         }
+
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translate3d(-100%,0,0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate3d(50,50,50);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translate3d(100,100,100);
+                opacity: 1;
+            }
+        }
+
+        .row-animation {
+            animation-name: slideInFromLeft;
+            animation-duration: 0.5s;
+            animation-fill-mode: forwards;
+        }
+
+
+        .circle {
+            position: relative;
+            width: 100px;
+            /* 设置宽度 */
+            height: 100px;
+            /* 设置高度 */
+            background-color: white;
+            /* 设置背景颜色 */
+            border-radius: 50%;
+            border: 1px solid black;
+            /* 设置圆角为50%来创建一个圆 */
+        }
     </style>
     <script src="/dist/hplus.js"></script>
+    <script>
+        hplus.createRequest([
+            { "key": "menu", "url": "http://localhost/api/medicine" },
+            { "key": "gird", "url": "http://localhost/api/formulas", "method": "POST", "params": { "pagesize": "20", "pageIndex": 1 } }
+        ]);
+    </script>
+    <script>
+    </script>
 </head>
 
 <body>
     <div>
         <ol h-data="menu">
-            <li template class="new-content template"><a href="{{b}}">{{a}}</a></li>
+            <li template class="new-content"><a href="{{textPath}}">{{bookName}}</a></li>
         </ol>
     </div>
-    <script>
-        window.addEventListener('load', function () {
-            function foo() {
-                return [
-                    { "a": "test", "b": "https://www.baidu.com/" },
-                    { "a": "test1", "b": "https://www.baidu.com/" },
-                    { "a": "test2", "b": "https://www.baidu.com/" }
-                ]
-            }
-            //hplus.createdatafn("menu",foo)
-            hplus.render("menu", foo())
-        });
-    </script>
+    <div class="circle">
+
+    </div>
+    <div>
+        <table h-data="gird">
+            <thead>
+                <tr>
+                    <td>数据1</td>
+                    <td>数据2</td>
+                    <td>数据3</td>
+                    <td>数据4</td>
+                    <td>数据5</td>
+                    <td>数据6</td>
+                    <td>数据7</td>
+                    <td>数据8</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr template class="new-content row-animation">
+                    <td>{{directions}}</td>
+                    <td>{{tcm}}</td>
+                    <td>{{method}}</td>
+                    <td>{{directions}}</td>
+                    <td>{{efficacy}}</td>
+                    <td>{{symptom}}</td>
+                    <td>{{disease}}</td>
+                    <td>{{image}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>
