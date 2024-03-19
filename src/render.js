@@ -1,29 +1,39 @@
-import { datastatus } from "./constant";
-
 export default function (key, datas) {
     let selectorstr = `[h-data="${key}"]`;
     let element = document.querySelector(selectorstr);
+    if (!element) return;
     let temp = element.querySelector('[template]');
-    let renderhtml = temp.outerHTML;
-    datas.forEach(d => {
-        let replacedhtml = replacevariable(renderhtml,d);
-        console.log(replacedhtml);
-        replacehtml(element, replacedhtml);
-    });
+    if (!temp) return;
+
+    datas.forEach(data => {  
+        let rendertemp = temp.cloneNode(true);
+        rendertemp.removeAttribute('template'); 
+        replaceBindings(rendertemp,data);
+        temp.parentElement.appendChild(rendertemp);  
+    });  
 }
 
-function replacehtml(element, renderhtml) {
-    element.insertAdjacentHTML('beforeend', renderhtml);
+function replaceBindings(element, data) {  
+   
+    for (let i = 0; i < element.attributes.length; i++) {  
+        const attr = element.attributes[i]; 
+        if (attr.value.includes('{{')) {  
+            attr.value = replaceText(attr.value, data);  
+        }  
+    }  
+
+    for (let child of element.childNodes) {  
+        if (child.nodeType === Node.TEXT_NODE) {  
+            child.textContent = replaceText(child.textContent, data);  
+        } else if (child.nodeType === Node.ELEMENT_NODE) {  
+            replaceBindings(child, data);  
+        }  
+    }  
 }
 
-function removeTemplate(htmlString) {  
-    const regex = /(template="[^"]*"|template)/g;  
-    const replacedHtml = htmlString.replace(regex, '');  
-    return replacedHtml;  
-  } 
-
-function replacevariable(htmlString, vars) {  
-    htmlString = removeTemplate(htmlString);
-    console.log(htmlString);
-    return htmlString.replace(/{{(\w+)}}/g, (match, key) => vars[key] || match);  
-  } 
+function replaceText(text, data) {  
+    const regex = /\{\{([^}]+)\}\}/g;  
+    return text.replace(regex, (match, key) => {  
+        return data.hasOwnProperty(key) ? data[key] : ''; 
+    });  
+} 
