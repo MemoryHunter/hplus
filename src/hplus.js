@@ -1,36 +1,80 @@
 import datatype from "./datatype";
-import { fnstatus } from "./constant";
+import {fnStatus,httpMethod} from "./constant";
 import render from "./render";
+import request from "./request";
 
 
-let arraydata = [];
-let arraygetdatafun = [];
+let datas = [];
+let requests = [];
 
-let createdatafn = function (key, fn) {
-    if (datatype(fn) !== 'Function') {
-        throw new Error('get data function is invalids');
-    }
-    if(arraygetdatafun.length && arraygetdatafun.find((o)=>{ o.key == key})){
-        arraygetdatafun.find((o)=>{ o.status = fnstatus.CONSTANT_WAITCALL})
-    }
-    arraygetdatafun.push(`{"key":${key},fn:${fn},"status":${fnstatus.CONSTANT_WAITCALL}}`)
-}
+function getDatasShared() {  
+    return datas;  
+}  
 
-let getdatas = function () {
-    let needexefn = arraygetdatafun.filter((o) => { o.status == fnstatus.CONSTANT_WAITCALL});
-    if (needexefn.length) {
-        needexefn.forEach((o) => {
-            let sdata = o.fn();
-            if(arraydata.length && arraydata.filter((d)=>{
-                if(o.key == d.key) d.data = sdata;
-            }));
-            else{
-                arraydata.push(`{"key":${o.key},"data":${sdata}`);
-            }
-        });
-    }
-}
+function setDatasShared(d) {  
+    datas.push(d);  
+}  
+
+function getRequestsShared() {  
+    return requests;  
+}  
+
+let createRequest = function(requestObj) {  
+    if (datatype(requestObj) === 'Object') {  
+        initRequest(requestObj);  
+    }  
+    if (datatype(requestObj) === 'Array') {  
+       requestObj.forEach(initRequest);  
+    }  
+};
 
 
-export default { createdatafn ,getdatas,render}
+function initRequest(requestObj) {  
+    const { key, url, method = 'GET', params = {} } = requestObj; 
+    if (datatype(key) !== 'string' && !key ) {  
+        throw new Error('key is invalid');  
+    }  
+    if (datatype(url) !== 'string' || url.trim() === '') {  
+        throw new Error('URL is required and must be a non-empty string');  
+    }  
+    if (datatype(method) !== 'string' || !Object.values(httpMethod).includes(method.toUpperCase())) {  
+        throw new Error('HTTP method is invalid or not supported');  
+    }  
+    const existingRequest = requests.find(o => o.key === key);  
+    if (existingRequest) {  
+        existingRequest.status = fnStatus.CONSTANT_WAIT;  
+    } else {  
+        requests.push({  
+            key: key,  
+            url: url,  
+            method: method,  
+            params: params,  
+            status: fnStatus.CONSTANT_WAIT  
+        });  
+    }  
+};
+
+// let getDatas = function () {
+//     let sendFn = requestFn.filter((o) => { o.status == fnStatus.CONSTANT_WAIT});
+//     if (sendFn.length) {
+//         sendFn.forEach((o) => {
+//             let sdata = o.fn();
+//             if(datas.length && datas.filter((d)=>{
+//                 if(o.key == d.key) d.data = sdata;
+//             }));
+//             else{
+//                 datas.push(`{"key":${o.key},"data":${sdata}`);
+//             }
+//         });
+//     }
+// }
+
+
+
+document.addEventListener('DOMContentLoaded', async function (){
+   await  request();
+});
+
+export default {getDatasShared,getRequestsShared,createRequest,setDatasShared,render}
+
 
